@@ -84,13 +84,14 @@ const getTileColor = (value: number) => getTileStyle(value, false).color;
 
 /**
  * Formats numbers for display.
- * Switches to 2^n notation for very large numbers to keep the UI clean.
+ * Switches to Scientific Notation for very large numbers to keep it "Natural".
  */
 const formatValue = (value: number) => {
-  if (value < 1000000) return value.toString();
   if (value === Infinity) return '∞';
-  const power = Math.round(Math.log2(value));
-  return `2^${power}`;
+  if (value < 1000000) return value.toLocaleString(); // Adds commas like 1,024
+  
+  // Convert to Scientific Notation (e.g., 1.23e+15)
+  return value.toExponential(2).replace('+', ''); 
 };
 
 // --- Main Application Component ---
