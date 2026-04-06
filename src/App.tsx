@@ -56,22 +56,31 @@ interface ScorePopup {
 const getRandomInt = (max: number) => Math.floor(Math.random() * max);
 
 /**
- * Returns the color associated with a tile value.
- * Uses a neon palette to match the "Toxic" theme.
+ * Returns a dynamic color and style properties for a tile.
+ * Uses HSL to ensure a continuous spectrum for astronomical numbers.
  */
-const getTileColor = (value: number) => {
-  const colors: Record<number, string> = {
-    2: '#3b82f6', // Blue
-    4: '#06b6d4', // Cyan
-    16: '#10b981', // Emerald
-    256: '#84cc16', // Lime
-    65536: '#eab308', // Yellow
-    4294967296: '#f97316', // Orange
-  };
+const getTileStyle = (value: number, isRushMode: boolean) => {
+  const logVal = Math.log2(value);
   
-  if (value > 4294967296) return '#ef4444'; // Red
-  return colors[value] || '#facc15';
+  // Base colors for early stages
+  if (value === 2) return { color: '#3b82f6', glow: 0, pulse: false };
+  if (value === 4) return { color: '#06b6d4', glow: 0, pulse: false };
+  if (value === 16) return { color: '#10b981', glow: 5, pulse: false };
+  if (value === 256) return { color: '#84cc16', glow: 10, pulse: false };
+  if (value === 65536) return { color: '#eab308', glow: 15, pulse: false };
+  if (value === 4294967296) return { color: '#f97316', glow: 20, pulse: true };
+  
+  // Dynamic HSL for higher values: Cycles through neon spectrum
+  const hue = (logVal * 35) % 360;
+  return {
+    color: `hsl(${hue}, 80%, 55%)`,
+    glow: Math.min(logVal * 2, 40),
+    pulse: value > 4294967296
+  };
 };
+
+// Keep getTileColor for simple backward compatibility where needed
+const getTileColor = (value: number) => getTileStyle(value, false).color;
 
 // --- Main Application Component ---
 export default function App() {
@@ -612,12 +621,6 @@ export default function App() {
       </div>
 
       <p className="mt-8 text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em]">
-        High-Performance Neon Edition
-      </p>
-    </div>
-  );
-}
-px] text-slate-600 font-bold uppercase tracking-[0.2em]">
         High-Performance Neon Edition
       </p>
     </div>
