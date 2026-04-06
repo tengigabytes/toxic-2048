@@ -155,8 +155,8 @@ export default function App() {
     const randValue = Math.random();
     if (score > 10000) {
       if (randValue < 0.4) value = 2;
-      else if (randValue < 0.8) value = 4;
-      else value = 8;
+      else if (randValue < 0.7) value = 4;
+      else value = 16; // Changed from 8 to 16 to maintain sequence compatibility
     } else if (score > 2000) {
       value = randValue < 0.6 ? 2 : 4;
     } else {
