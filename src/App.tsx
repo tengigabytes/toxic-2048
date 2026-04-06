@@ -413,10 +413,9 @@ export default function App() {
           ctx.fillStyle = tile.value > 4 ? 'white' : '#1e293b';
           
           // Responsive font size for huge numbers
-          const valStr = tile.value.toString();
+          const valStr = formatValue(tile.value);
           let fontSize = 32;
-          if (valStr.length > 10) fontSize = 12;
-          else if (valStr.length > 7) fontSize = 16;
+          if (valStr.length > 8) fontSize = 16;
           else if (valStr.length > 5) fontSize = 20;
           else if (valStr.length > 3) fontSize = 26;
           
@@ -615,6 +614,18 @@ export default function App() {
           <span className="text-xs font-bold uppercase tracking-wider">Toxic Growth</span>
         </div>
         <div className="flex items-center gap-2 bg-slate-900/30 px-4 py-2 rounded-full border border-slate-800/30">
+          <Zap size={14} className="text-yellow-500" />
+          <span className="text-xs font-bold uppercase tracking-wider">Multi Merge</span>
+        </div>
+      </div>
+
+      <p className="mt-8 text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em]">
+        High-Performance Neon Edition
+      </p>
+    </div>
+  );
+}
+full border border-slate-800/30">
           <Zap size={14} className="text-yellow-500" />
           <span className="text-xs font-bold uppercase tracking-wider">Multi Merge</span>
         </div>
