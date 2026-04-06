@@ -82,6 +82,17 @@ const getTileStyle = (value: number, isRushMode: boolean) => {
 // Keep getTileColor for simple backward compatibility where needed
 const getTileColor = (value: number) => getTileStyle(value, false).color;
 
+/**
+ * Formats numbers for display.
+ * Switches to 2^n notation for very large numbers to keep the UI clean.
+ */
+const formatValue = (value: number) => {
+  if (value < 1000000) return value.toString();
+  if (value === Infinity) return '∞';
+  const power = Math.round(Math.log2(value));
+  return `2^${power}`;
+};
+
 // --- Main Application Component ---
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -614,18 +625,6 @@ export default function App() {
           <span className="text-xs font-bold uppercase tracking-wider">Toxic Growth</span>
         </div>
         <div className="flex items-center gap-2 bg-slate-900/30 px-4 py-2 rounded-full border border-slate-800/30">
-          <Zap size={14} className="text-yellow-500" />
-          <span className="text-xs font-bold uppercase tracking-wider">Multi Merge</span>
-        </div>
-      </div>
-
-      <p className="mt-8 text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em]">
-        High-Performance Neon Edition
-      </p>
-    </div>
-  );
-}
-full border border-slate-800/30">
           <Zap size={14} className="text-yellow-500" />
           <span className="text-xs font-bold uppercase tracking-wider">Multi Merge</span>
         </div>
