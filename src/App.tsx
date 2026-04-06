@@ -380,24 +380,36 @@ export default function App() {
       gameState.grid.forEach((row, y) => {
         row.forEach((tile, x) => {
           if (!tile) return;
+          const style = getTileStyle(tile.value, gameState.isRushMode);
           const tx = x * (cellSize + gap) + gap;
           const ty = y * (cellSize + gap) + gap;
           
-          ctx.shadowBlur = gameState.isRushMode ? 20 : 10;
-          ctx.shadowColor = getTileColor(tile.value);
-          ctx.fillStyle = getTileColor(tile.value);
+          // Apply Pulsing Effect for high-value tiles
+          let currentCellSize = cellSize;
+          let offset = 0;
+          if (style.pulse) {
+            const pulseAmount = Math.sin(Date.now() / 200) * 3;
+            currentCellSize += pulseAmount;
+            offset = -pulseAmount / 2;
+          }
+
+          ctx.shadowBlur = (gameState.isRushMode ? 25 : 10) + style.glow;
+          ctx.shadowColor = style.color;
+          ctx.fillStyle = style.color;
           
-          drawRoundedRect(ctx, tx, ty, cellSize, cellSize, 8);
+          drawRoundedRect(ctx, tx + offset, ty + offset, currentCellSize, currentCellSize, 8);
           ctx.shadowBlur = 0;
 
+          // Text Contrast
           ctx.fillStyle = tile.value > 4 ? 'white' : '#1e293b';
           
           // Responsive font size for huge numbers
           const valStr = tile.value.toString();
           let fontSize = 32;
-          if (valStr.length > 7) fontSize = 14;
-          else if (valStr.length > 5) fontSize = 18;
-          else if (valStr.length > 3) fontSize = 24;
+          if (valStr.length > 10) fontSize = 12;
+          else if (valStr.length > 7) fontSize = 16;
+          else if (valStr.length > 5) fontSize = 20;
+          else if (valStr.length > 3) fontSize = 26;
           
           ctx.font = `bold ${fontSize}px sans-serif`;
           ctx.textAlign = 'center';
@@ -600,6 +612,12 @@ export default function App() {
       </div>
 
       <p className="mt-8 text-[10px] text-slate-600 font-bold uppercase tracking-[0.2em]">
+        High-Performance Neon Edition
+      </p>
+    </div>
+  );
+}
+px] text-slate-600 font-bold uppercase tracking-[0.2em]">
         High-Performance Neon Edition
       </p>
     </div>
